@@ -5,7 +5,16 @@ import pandas as pd
 def get_courses(topic):
     url = f"https://www.udemy.com/api-2.0/courses/?topic=${topic}&price=price-free"
     response = requests.get(url)
-    return response.json()["results"]
+    if response.status_code == 200:
+        results = response.json().get("results")
+        if results:
+            return results
+        else:
+            print("No results found in API response.")
+            return None
+    else:
+        print("API request failed with status code:", response.status_code)
+        return None
 
 def main():
     st.title("Udemy Demand Analyzer")
