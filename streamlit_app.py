@@ -23,9 +23,11 @@ def main():
         courses = get_courses(topic)
         if courses:
             df = pd.DataFrame(courses)
-            st.write("Number of courses: ", len(courses))
-            st.write("Top 5 courses:")
-            st.write(df[["title", "price", "num_subscribers"]].head())
+            df["topic"] = df["title"].apply(lambda x: x.split(" ")[0])
+            topic_counts = df["topic"].value_counts().reset_index()
+            topic_counts.columns = ["Topic", "Count"]
+            st.write("Topics with highest demand:")
+            st.write(topic_counts.head(10))
         else:
             st.write("No courses found.")
     else:
